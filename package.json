@@ -13,6 +13,7 @@
     "@codemirror/lang-javascript": "^6.2.3",
     "@tailwindcss/vite": "^4.0.7",
     "codemirror": "^6.0.1",
+    "lucide-react": "^0.475.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwindcss": "^4.0.7"
