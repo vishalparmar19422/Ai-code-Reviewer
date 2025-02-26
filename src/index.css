@@ -8,3 +8,7 @@ html{
   *::before ,*::after,* {
   box-sizing: inherit;
   }
+
+  #mid::-webkit-scrollbar{
+    display: none;
+  }
