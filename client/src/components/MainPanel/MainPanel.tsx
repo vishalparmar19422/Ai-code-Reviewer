@@ -13,6 +13,7 @@ export default function MainPanel() {
     { id: "js", name: "JavaScript" },
     { id: "cpp", name: "C++" },
     { id: "python", name: "Python" },
+    { id: "java", name: "Java" },
   ];
 
   const copyToClipboard = () => {
@@ -120,7 +121,7 @@ export default function MainPanel() {
           </div>
         </div>
 
-        <div className="p-4 bg-[#111318] shadow-xl border-t border-gray-800/50 relative z-10">
+        <div className="p-4 bg-[#0c0d13] shadow-xl border-t border-gray-800/50 relative z-10">
           <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
             Review Code
           </button>

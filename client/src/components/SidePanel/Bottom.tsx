@@ -3,8 +3,8 @@ import { Send } from "lucide-react";
 const Bottom = () => {
   return (
     <>
-       <div className="p-5  bg-[#13151A]">
-          <div className="relative group ">
+       <div className="py-5 px-2  bg-[#090a0e]">
+          <div className="relative group  ">
             <input
               type="text"
               placeholder="Ask AI..."
