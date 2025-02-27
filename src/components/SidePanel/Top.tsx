@@ -1,24 +1,24 @@
-import { MessageSquare } from "lucide-react";
-import Lang from "./lang";
+import { Bot,Plus } from "lucide-react";
 
 const Top = () => {
-    return ( 
-        <>
-        <div className="top bg-black rounded h-1/10 w-full flex items-center justify-around">
-          <div className="profile w-10 h-10 bg-white rounded-full flex justify-center items-center font-semibold ">
-            V
+  return (
+    <>
+      <div className="p-5 border-b border-gray-800/70 bg-[#111318]">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20 transition-transform hover:scale-105 duration-300 ">
+                <Bot className="text-white" size={24} />
+              </div>
+              <span className="font-semibold text-lg text-gray-100 tracking-tight">Code Reviewer</span>
+            </div>
+            <button className="p-2.5 hover:bg-gray-800 rounded-lg text-gray-400 hover:text-gray-100 transition-all duration-300  active:scale-105">
+              <Plus size={20} />
+            </button>
           </div>
-
-          <button className=" rounded py-4 h-11 w-50 cursor-pointer flex justify-around items-center text-lg font-semibold text-white bg-blue-600  hover:bg-blue-700 active:bg-slate-700 ">
-            New Chat...
-            <MessageSquare />
-          </button>
         </div>
-            <div>
-            <Lang></Lang>
-            </div>  
-            </>
-     );
-}
- 
+      
+    </>
+  );
+};
+
 export default Top;

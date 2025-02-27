@@ -7,7 +7,7 @@ const Lang = () => {
   const [selectedOption, setSelectedOption] = React.useState(null);
   const toggling = () => setIsOpen(!isOpen);
 
-  const onOptionClicked = (value) => () => {
+  const onOptionClicked = (value : any) => () => {
     setSelectedOption(value);
     setIsOpen(false);
   };
