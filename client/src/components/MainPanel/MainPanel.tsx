@@ -39,9 +39,9 @@ export default function MainPanel() {
       <Toaster />
       <div
         id={"scroll"}
-        className="  flex-1 flex flex-col bg-[#0A0C10] overflow-auto"
+        className="mainpanel flex-1 flex flex-col bg-[#212121] overflow-auto"
       >
-        <div className="px-6 py-4 bg-[#111318] shadow-xl flex justify-between items-center border-b border-gray-800/50 relative z-10">
+        <div className="navbar px-6 py-4 bg-[#090a0e] shadow-xl flex justify-between items-center relative z-10">
           <div className="flex items-center space-x-3 text-gray-300">
             <MessageSquare size={18} className="text-indigo-400" />
             <input
@@ -49,15 +49,15 @@ export default function MainPanel() {
               placeholder="Enter Code Title"
               value={sessionName}
               onChange={handleSessionNameChange}
-              className="bg-gray-800/20 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-gray-100 font-medium w-64 transition-all duration-300"
+              className="bg-[#2f2f2f] px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-gray-100 font-medium w-64 transition-all duration-300"
             />
           </div>
         </div>
 
-        <div className="flex-1 p-4 overflow-auto bg-[#0A0C10] scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">
-          <div className="bg-[#111318] rounded-xl shadow-2xl shadow-purple-500/5 border border-gray-800/50 relative">
+        <div className="flex-1 px-4 bg-[#090a0e]">
+          <div className="bg-[#2f2f2f] rounded-xl shadow-2xl shadow-gray-500/5 border border-gray-800/50 relative">
             {/* Code Editor Top Bar */}
-            <div className="flex justify-between items-center px-4 py-3 border-b border-gray-800/50">
+            <div className="flex justify-between items-center px-4 py-1 border-b border-gray-800/50">
               <div className="relative">
                 <button
                   onClick={() =>
@@ -103,17 +103,21 @@ export default function MainPanel() {
 
             <CodeEditor
               value={code}
+              className="scroll"
               language={language}
               placeholder="Please enter your code."
               onChange={(evn) => setCode(evn.target.value)}
               padding={20}
               style={{
                 fontSize: 14,
-                backgroundColor: "#111318",
+                backgroundColor: "#0d0d0d",
                 fontFamily:
                   "ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace",
                 borderRadius: "0.75rem",
-                minHeight: "calc(100vh - 230px)",
+                // minHeight: "calc(100vh - 230px)",
+                overflow: "auto",
+                resize: "none",
+                height: "535px",
                 color: "#e5e7eb",
               }}
               data-color-mode="dark"
@@ -121,9 +125,12 @@ export default function MainPanel() {
           </div>
         </div>
 
-        <div className="p-4 bg-[#0c0d13] shadow-xl border-t border-gray-800/50 relative z-10">
-          <button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
-            Review Code
+        <div className="p-4 bg-[#090a0e] shadow-xl border-gray-800/50 relative z-10">
+          <button className="w-[45%] mr-[10%] cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
+            Highlight Errors
+          </button>
+          <button className="w-[45%]  bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
+            Show Errors
           </button>
         </div>
       </div>
