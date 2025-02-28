@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { userControl } from "../controllers/user.controller.js";
+import { getGeminiRes } from "../controllers/getGeminiResponse.js";
 
 export const route = Router();
 
-route.get("/", userControl);
+route.post("/reviewcode",getGeminiRes)

@@ -39,7 +39,7 @@ export default function MainPanel() {
       <Toaster />
       <div
         id={"scroll"}
-        className="mainpanel flex-1 flex flex-col bg-[#212121] overflow-auto"
+        className=" mainpanel flex-1 flex flex-col bg-[#212121] overflow-auto"
       >
         <div className="navbar px-6 py-4 bg-[#090a0e] shadow-xl flex justify-between items-center relative z-10">
           <div className="flex items-center space-x-3 text-gray-300">
@@ -57,7 +57,7 @@ export default function MainPanel() {
         <div className="flex-1 px-4 bg-[#090a0e]">
           <div className="bg-[#2f2f2f] rounded-xl shadow-2xl shadow-gray-500/5 border border-gray-800/50 relative">
             {/* Code Editor Top Bar */}
-            <div className="flex justify-between items-center px-4 py-1 border-b border-gray-800/50">
+            <div className=" flex justify-between items-center px-4 py-1 border-b border-gray-800/50">
               <div className="relative">
                 <button
                   onClick={() =>
@@ -100,15 +100,15 @@ export default function MainPanel() {
                 <span className="font-medium">Copy</span>
               </button>
             </div>
-
             <CodeEditor
               value={code}
-              className="scroll"
+              className="scroll "
               language={language}
               placeholder="Please enter your code."
               onChange={(evn) => setCode(evn.target.value)}
               padding={20}
               style={{
+                
                 fontSize: 14,
                 backgroundColor: "#0d0d0d",
                 fontFamily:
