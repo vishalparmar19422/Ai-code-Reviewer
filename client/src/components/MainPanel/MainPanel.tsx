@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MessageSquare, ChevronDown, Check, Copy } from "lucide-react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import toast, { Toaster } from "react-hot-toast";
+import axios from "axios";
 
 export default function MainPanel() {
+  const [error, setError] = useState(null);
   const [code, setCode] = useState("// Write your code here\n");
   const [sessionName, setSessionName] = useState("Code #1");
   const [language, setLanguage] = useState("js");
@@ -15,6 +17,19 @@ export default function MainPanel() {
     { id: "python", name: "Python" },
     { id: "java", name: "Java" },
   ];
+
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
+  const getGeminiResponse = () => {
+    axios
+      .post(`${API_URL}/reviewcode`, { code })
+      .then((res) => {
+        setError(res.data.response)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(code);
@@ -108,7 +123,6 @@ export default function MainPanel() {
               onChange={(evn) => setCode(evn.target.value)}
               padding={20}
               style={{
-                
                 fontSize: 14,
                 backgroundColor: "#0d0d0d",
                 fontFamily:
@@ -129,7 +143,10 @@ export default function MainPanel() {
           <button className="w-[45%] mr-[10%] cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
             Highlight Errors
           </button>
-          <button className="w-[45%]  bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
+          <button
+            onClick={getGeminiResponse}
+            className="w-[45%]  bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20"
+          >
             Show Errors
           </button>
         </div>
