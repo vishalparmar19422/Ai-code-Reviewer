@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MessageSquare, ChevronDown, Check, Copy } from "lucide-react";
 import CodeEditor from "@uiw/react-textarea-code-editor";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import "./code.css";
 
-export default function MainPanel() {
-  const [error, setError] = useState(null);
+export default function MainPanel({ setValue }: any) {
   const [code, setCode] = useState("// Write your code here\n");
   const [sessionName, setSessionName] = useState("Code #1");
   const [language, setLanguage] = useState("js");
@@ -24,7 +24,8 @@ export default function MainPanel() {
     axios
       .post(`${API_URL}/reviewcode`, { code })
       .then((res) => {
-        setError(res.data.response)
+
+        setValue(res.data.response);
       })
       .catch((err) => {
         console.log(err);

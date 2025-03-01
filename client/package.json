@@ -25,6 +25,8 @@
     "react-dom": "^19.0.0",
     "react-draggable": "^4.4.6",
     "react-hot-toast": "^2.5.2",
+    "react-markdown": "^10.0.0",
+    "remark-gfm": "^4.0.1",
     "tailwindcss": "^4.0.7"
   },
   "devDependencies": {
