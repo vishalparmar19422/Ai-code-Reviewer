@@ -5,7 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import "./code.css";
 
-export default function MainPanel({ setValue }: any) {
+export default function MainPanel({ setValue, setErrPop, setIsMin }: any) {
   const [code, setCode] = useState("// Write your code here\n");
   const [sessionName, setSessionName] = useState("Code #1");
   const [language, setLanguage] = useState("js");
@@ -24,12 +24,13 @@ export default function MainPanel({ setValue }: any) {
     axios
       .post(`${API_URL}/reviewcode`, { code })
       .then((res) => {
-
         setValue(res.data.response);
       })
       .catch((err) => {
         console.log(err);
       });
+
+    setErrPop(true);
   };
 
   const copyToClipboard = () => {
@@ -50,6 +51,7 @@ export default function MainPanel({ setValue }: any) {
   const handleSessionNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSessionName(e.target.value);
   };
+
   return (
     <>
       <Toaster />
@@ -107,6 +109,14 @@ export default function MainPanel({ setValue }: any) {
                   </div>
                 )}
               </div>
+
+              <button
+                onClick={() => setIsMin(false)}
+                className="flex items-center space-x-2 text-gray-400 hover:text-gray-100 bg-gray-800/30 px-3 py-1.5 rounded-lg transition-all duration-300 hover:bg-gray-700/50"
+              >
+                <Copy size={16} />
+                <span className="font-medium">Show</span>
+              </button>
 
               <button
                 onClick={copyToClipboard}

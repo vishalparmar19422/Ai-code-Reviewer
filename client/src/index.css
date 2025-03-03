@@ -23,3 +23,8 @@ html{
 .scroll::-webkit-scrollbar {
   display: none;
 }
+.pop::-webkit-scrollbar {
+  display: none;
+}
+
+
