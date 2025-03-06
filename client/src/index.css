@@ -1,24 +1,26 @@
 @import "tailwindcss";
 
-html{
-    box-sizing: border-box;
-  }
-  
-  
-  *::before ,*::after,* {
-  box-sizing: inherit;
-  }
+html {
+  box-sizing: border-box;
+}
 
-  /* #mid::-webkit-scrollbar{
-    display: none;
-  }
+*::before,
+*::after,
+* {
+  box-sizing: inherit;
+}
+
+
+#mid::-webkit-scrollbar {
+  display: none;
+}
 .scrollbar-hide {
-  -ms-overflow-style: none; 
-  scrollbar-width: none;     
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
-  display: none;  
-} */
+  display: none;
+}
 
 .scroll::-webkit-scrollbar {
   display: none;
@@ -26,5 +28,3 @@ html{
 .pop::-webkit-scrollbar {
   display: none;
 }
-
-
