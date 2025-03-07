@@ -11,6 +11,9 @@ import axios from "axios";
 import { Editor } from "@monaco-editor/react";
 import "monaco-editor/min/vs/editor/editor.main.css";
 import { CodeContext } from "../../context/CodeContenxt";
+import * as monaco from "monaco-editor"
+
+
 
 export default function MainPanel() {
   const [code, setCode] = useState("//Write your code here\n");
@@ -39,6 +42,10 @@ export default function MainPanel() {
   };
 
   const copyToClipboard = () => {
+
+    monaco.editor.onDidChangeMarkers((marker)=>{
+      console.log(marker);
+    })
     navigator.clipboard.writeText(code);
     toast.success("Code copied to clipboard!", {
       style: {
