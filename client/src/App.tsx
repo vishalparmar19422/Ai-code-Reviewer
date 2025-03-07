@@ -2,27 +2,17 @@ import SidePanel from "./components/SidePanel";
 import "./App.css";
 import MainPanel from "./components/MainPanel/MainPanel";
 import { motion } from "framer-motion";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Minimize2 } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import "github-markdown-css/github-markdown.css";
-import prismjs from "prismjs";
-import "prismjs/components/prism-javascript";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/plugins/line-numbers/prism-line-numbers.css";
+
 import { CodeContext } from "./context/CodeContenxt";
 
 function App() {
-  const { value,  errPop, setErrPop,  } =
-    useContext(CodeContext);
-
-  useEffect(() => {
-    if (value) {
-      prismjs.highlightAll();
-    }
-  }, [value, errPop]);
+  const { value, errPop, setErrPop } = useContext(CodeContext);
 
   return (
     <>

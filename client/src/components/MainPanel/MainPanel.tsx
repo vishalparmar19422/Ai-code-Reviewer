@@ -17,17 +17,14 @@ export default function MainPanel() {
   const [sessionName, setSessionName] = useState("Code #1");
   const [language, setLanguage] = useState("js");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-
+  const { setValue, setErrPop, handleEmptyValue } = useContext(CodeContext);
+  const API_URL = import.meta.env.VITE_BACKEND_URL;
   const languages = [
     { id: "js", name: "JavaScript" },
     { id: "cpp", name: "C++" },
     { id: "python", name: "Python" },
     { id: "java", name: "Java" },
   ];
-  const { setValue, setErrPop, handleEmptyValue } = useContext(CodeContext);
-
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
-
   const getGeminiResponse = () => {
     axios
       .post(`${API_URL}/reviewcode`, { code })
@@ -67,6 +64,7 @@ export default function MainPanel() {
         id={"scroll"}
         className=" mainpanel flex-1 flex flex-col bg-[#212121] overflow-auto"
       >
+        {/*top */}
         <div className="navbar px-6 py-4 bg-[#090a0e] shadow-xl flex justify-between items-center relative z-10">
           <div className="flex items-center space-x-3 text-gray-300">
             <MessageSquare size={18} className="text-indigo-400" />
@@ -89,6 +87,7 @@ export default function MainPanel() {
           </button>
         </div>
 
+        {/*code Editor */}
         <div className="flex-1 px-4 bg-[#090a0e]">
           <div className="bg-[#2a2a2a] rounded-xl relative">
             {/* Code Editor Top Bar */}
@@ -159,16 +158,28 @@ export default function MainPanel() {
             </div>
           </div>
         </div>
-
+        {/*bottom buttons */}
         <div className="p-4 bg-[#090a0e] shadow-xl border-gray-800/50 relative z-10">
           <button className="w-[45%] mr-[10%] cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
             Highlight Errors
           </button>
-          <button
+          <button 
             onClick={() => {
               const empty = handleEmptyValue(code);
               if (!empty) {
                 getGeminiResponse();
+              } else {
+                toast.error("Code Is Empty ", {
+                  style: {
+                    background: "#1F2937",
+                    color: "#fff",
+                    borderRadius: "0.5rem",
+                  },
+                  iconTheme: {
+                    primary: "#818CF8",
+                    secondary: "#1F2937",
+                  },
+                });
               }
             }}
             className="w-[45%]  bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20"
