@@ -1,4 +1,4 @@
-import { Bot, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { UserButton } from "@clerk/clerk-react";
 
 const Top = () => {

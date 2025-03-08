@@ -1,6 +1,5 @@
 import { SignInButton, SignUpButton } from "@clerk/clerk-react";
 import { Bot, Bug } from "lucide-react";
-import React from "react";
 
 export default function HomePage() {
   return (
