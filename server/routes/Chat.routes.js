@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { getGeminiRes } from "../controllers/getGeminiResponse.js";
 
-export const route = Router();
+const router = Router();
 
-route.post("/reviewcode",getGeminiRes)
+router.post("/getreview", getGeminiRes);
+
+export default router;

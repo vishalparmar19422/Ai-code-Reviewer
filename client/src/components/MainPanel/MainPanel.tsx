@@ -30,7 +30,7 @@ export default function MainPanel() {
   ];
   const getGeminiResponse = () => {
     axios
-      .post(`${API_URL}/reviewcode`, { code })
+      .post(`${API_URL}/getreview`, { code })
       .then((res) => {
         setValue(res.data.response);
       })
