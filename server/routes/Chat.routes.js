@@ -6,3 +6,4 @@ const router = Router();
 router.post("/getreview", getGeminiRes);
 
 export default router;
+    
