@@ -1,4 +1,6 @@
 server/.env
+client/.env
+
 
 # Logs
 logs
