@@ -18,18 +18,13 @@ model User {
 }
 
 model Chat {
-  id        String    @id @default(uuid())
-  userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  title      String   @default("code_0")
+  code       String   @default("//write something here")
+  codeReview String   @default("//Review Will Be Shown Here ")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
-
-model Message {
-  id      String @id @default(uuid())
-  chatId  String
-  userMsg String?
-  aiRes   String?
-  chat    Chat   @relation(fields: [chatId], references: [id])
-}
+  

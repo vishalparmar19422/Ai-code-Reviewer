@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   MessageSquare,
   ChevronDown,
@@ -11,17 +11,23 @@ import axios from "axios";
 import { Editor } from "@monaco-editor/react";
 import "monaco-editor/min/vs/editor/editor.main.css";
 import { CodeContext } from "../../context/CodeContenxt";
-import * as monaco from "monaco-editor"
-
-
+import API_URL from "../../config";
 
 export default function MainPanel() {
+  const {
+    value,
+    setValue,
+    setErrPop,
+    handleEmptyValue,
+    currChat,
+    allChat,
+    currChatData,
+    setCurrChatData,
+  } = useContext(CodeContext);
   const [code, setCode] = useState("//Write your code here\n");
-  const [sessionName, setSessionName] = useState("Code #1");
   const [language, setLanguage] = useState("js");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
-  const { setValue, setErrPop, handleEmptyValue } = useContext(CodeContext);
-  const API_URL = import.meta.env.VITE_BACKEND_URL;
+
   const languages = [
     { id: "js", name: "JavaScript" },
     { id: "cpp", name: "C++" },
@@ -30,9 +36,13 @@ export default function MainPanel() {
   ];
   const getGeminiResponse = () => {
     axios
-      .post(`${API_URL}/getreview`, { code })
+      .put(
+        `${API_URL}/getreview`,
+        { code: code },
+        { headers: { chatId: currChat } }
+      )
       .then((res) => {
-        setValue(res.data.response);
+        setValue(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -42,27 +52,32 @@ export default function MainPanel() {
   };
 
   const copyToClipboard = () => {
-
-    monaco.editor.onDidChangeMarkers((marker)=>{
-      console.log(marker);
-    })
-    navigator.clipboard.writeText(code);
-    toast.success("Code copied to clipboard!", {
-      style: {
-        background: "#1F2937",
-        color: "#fff",
-        borderRadius: "0.5rem",
-      },
-      iconTheme: {
-        primary: "#818CF8",
-        secondary: "#1F2937",
-      },
-    });
+    if (currChatData) {
+      navigator.clipboard.writeText(currChatData?.code);
+      toast.success("Code copied to clipboard!", {
+        style: {
+          background: "#1F2937",
+          color: "#fff",
+          borderRadius: "0.5rem",
+        },
+        iconTheme: {
+          primary: "#818CF8",
+          secondary: "#1F2937",
+        },
+      });
+    }
   };
 
-  const handleSessionNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSessionName(e.target.value);
-  };
+  useEffect(() => {
+    if (currChat) {
+      const chat = allChat.find((chat) => {
+        return chat.id == currChat;
+      });
+      setCurrChatData(chat);
+    } else {
+      setCurrChatData(undefined);
+    }
+  }, [allChat, currChat, value]);
 
   return (
     <>
@@ -75,23 +90,21 @@ export default function MainPanel() {
         <div className="navbar px-6 py-4 bg-[#090a0e] shadow-xl flex justify-between items-center relative z-10">
           <div className="flex items-center space-x-3 text-gray-300">
             <MessageSquare size={18} className="text-indigo-400" />
-            <input
-              type="text"
-              placeholder="Enter Code Title"
-              value={sessionName}
-              onChange={handleSessionNameChange}
-              className="bg-[#2f2f2f] px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-gray-100 font-medium w-64 transition-all duration-300"
-            />
+            <h1 className="bg-[#2f2f2f] px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/50 text-gray-100 font-medium w-64 transition-all duration-300">
+              {currChatData?.title}
+            </h1>
           </div>
-          <button
-            onClick={() => {
-              setErrPop(true);
-            }}
-            className="flex items-center space-x-2 text-gray-300 bg-gray-700/90 px-3 py-1.5 rounded-lg transition-all duration-300 hover:bg-gray-600/90"
-          >
-            <Maximize size={20} />
-            <span className="font-medium">Show</span>
-          </button>
+          <div className="top-buttons flex gap-4">
+            <button
+              onClick={() => {
+                setErrPop(true);
+              }}
+              className="flex items-center space-x-2 text-gray-300 bg-gray-700/90 px-3 py-1.5 rounded-lg transition-all duration-300 hover:bg-gray-600/90"
+            >
+              <Maximize size={20} />
+              <span className="font-medium">Show Review</span>
+            </button>
+          </div>
         </div>
 
         {/*code Editor */}
@@ -145,11 +158,11 @@ export default function MainPanel() {
             {/* Code Editor */}
             <div className="editor  bg-[#1e1e1e]">
               <Editor
-                value={code}
+                value={currChatData?.code}
                 defaultLanguage={"javascript"}
                 theme="vs-dark"
                 height="535px"
-                defaultValue="Please enter your code."
+                defaultValue="//Loading"
                 onChange={(evn) => {
                   setCode(evn || "");
                 }}
@@ -170,7 +183,7 @@ export default function MainPanel() {
           <button className="w-[45%] mr-[10%] cursor-pointer bg-gradient-to-r from-indigo-600 to-purple-600 text-gray-100 py-3 px-6 rounded-lg hover:opacity-90 transition-all duration-300 font-medium shadow-xl shadow-purple-500/10 active:scale-[0.98] hover:shadow-purple-500/20">
             Highlight Errors
           </button>
-          <button 
+          <button
             onClick={() => {
               const empty = handleEmptyValue(code);
               if (!empty) {

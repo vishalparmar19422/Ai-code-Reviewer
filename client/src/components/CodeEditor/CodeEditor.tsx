@@ -8,10 +8,11 @@ import "github-markdown-css/github-markdown.css";
 import { CodeContext } from "../../context/CodeContenxt";
 
 export default function CodeEditor() {
-  const { value, setErrPop, errPop } = useContext(CodeContext);
+  const { setErrPop, errPop, currChatData } = useContext(CodeContext);
+
   return (
     <>
-      {errPop ? (
+      {errPop && (
         <motion.div
           drag
           dragConstraints={{ left: -1200, right: 1200, top: -600, bottom: 600 }}
@@ -31,11 +32,11 @@ export default function CodeEditor() {
           </div>
 
           <div className="markdown-body pop h-[92%] w-[100%]">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{value}</ReactMarkdown>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {currChatData?.codeReview}
+            </ReactMarkdown>
           </div>
         </motion.div>
-      ) : (
-        ""
       )}
     </>
   );

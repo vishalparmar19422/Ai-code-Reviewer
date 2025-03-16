@@ -3,11 +3,15 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const getGeminiRes = async (req, res) => {
-  const { code, language } = req.body;
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
-    systemInstruction: `
+  const { title, code } = req.body;
+  const chatId = req.get("chatId");
+
+  let newTitle;
+  try {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash",
+      systemInstruction: `
     Here’s a solid system instruction for your AI code reviewer:
 
     AI System Instruction: Senior Code Reviewer (7+ Years of Experience)
@@ -90,52 +94,67 @@ export const getGeminiRes = async (req, res) => {
 
     Would you like any adjustments based on your specific needs? 🚀
   `,
-  });
-  const prompt = code;
-  const result = await model.generateContent(prompt);
-  res.json({ response: result.response.text() });
+    });
+    const prompt = code;
+    const result = await model.generateContent(prompt);
+
+    if (!chatId) {
+      res.status(400).json({ message: "chatId is requried" });
+    }
+
+    if (title) {
+      newTitle = title;
+    } else {
+      newTitle = getFirstTwoWords(code);
+    }
+
+    const UpdatedChat = await prisma.chat.update({
+      where: {
+        id: chatId,
+      },
+      data: {
+        title: newTitle,
+        code,
+        codeReview: result.response.text(),
+      },
+    });
+    res.status(200).json({ message: "chat updated successfully", UpdatedChat });
+  } catch (error) {
+    console.log("error while updating chat ", error);
+    res.status(400).json({ message: "error while updating chat ", error });
+  }
 };
 
-export const ChatWithAi = async (req, res) => {
-  const { userid } = req.query;
-  const { message } = req.body;
-  if (!userid) {
-    return res.status(400).json({ message: "User not found" });
+export const CreateNewChat = async (req, res) => {
+  try {
+    const userId = req.get("userId");
+    if (!userId) {
+      res.status(400).json({ message: "userId is requried" });
+    }
+    const newChat = await prisma.chat.create({
+      data: {
+        userId,
+      },
+    });
+    res.status(200).json(newChat);
+  } catch (error) {
+    console.log("error creating new chat ", error);
+    res.status(500).json({ message: "error creating new chat", error });
   }
-  if (!message) {
-    return res.status(400).json({ message: "message is empty " });
-  }
-  const newChat = await prisma.chat.findFirst({
-    where: { userId: userid },
-  });
-
-  const previousChat = await prisma.message.findMany({
-    where: { chatId: newChat.chatId },
-  });
-
-  const ChatHistory = [
-    ...previousChat.map((msg) => ({ userMsg: msg.userMsg, aiRes: msg.aiRes })),
-    { userMsg: message, aiRes: null },
-  ];
-
-  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-  const model = genAI.getGenerativeModel({
-    model: "gemini-2.0-flash",
-    systemInstruction:
-      "I will give you an array of messages that contains our previous 10 conversations. Use this history to generate a response for the latest user message at the last index.",
-  });
-  const result = await model.generateContent(JSON.stringify(ChatHistory));
-  const newMessage = await prisma.message.create({
-    data: {
-      chatId: newChat.id,
-      userMsg: message,
-      aiRes: result.response.text(),
-    },
-  });
-
-  res.json({ Msg: newMessage });
 };
 
-export const CreateNewChat =async (req,res) =>{
-  const {userId} = req.params;
+function getFirstTwoWords(code) {
+  if (!code || typeof code !== "string") {
+    return "";
+  }
+
+  const words = code.trim().split(/\s+/);
+
+  if (words.length >= 2) {
+    return words[0] + " " + words[1] + " ...";
+  } else if (words.length === 1) {
+    return words[0] + " ..."; //
+  } else {
+    return "...";
+  }
 }

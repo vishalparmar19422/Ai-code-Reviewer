@@ -1,19 +1,16 @@
 import { Router } from "express";
-import { ChatWithAi, getGeminiRes } from "../controllers/chatController.js";
 import {
-  CreateUser,
-  GetAllMsgs,
-  GetAllUsers,
-  GetUserChat,
-} from "../controllers/userController.js";
+  getGeminiRes,
+  CreateNewChat,
+  
+} from "../controllers/chatController.js";
+import { CreateUser, GetUserChats } from "../controllers/userController.js";
 
 const router = Router();
 
-router.post("/getreview", getGeminiRes);
 router.post("/createuser", CreateUser);
-router.post("/chatwithai", ChatWithAi);
-router.get("/getallmessages", GetAllMsgs);
-router.get("/getallusers", GetAllUsers);
-router.get("/getuserchat", GetUserChat);
+router.post("/createchat", CreateNewChat);
+router.get("/getuserchats", GetUserChats);
+router.put("/getreview", getGeminiRes);
 
 export default router;
