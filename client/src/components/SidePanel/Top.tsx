@@ -1,5 +1,4 @@
 import { Plus } from "lucide-react";
-import { UserButton } from "@clerk/clerk-react";
 import axios from "axios";
 import API_URL from "../../config";
 import { useContext } from "react";
@@ -8,11 +7,11 @@ import { CodeContext } from "../../context/CodeContenxt";
 const Top = () => {
   const { setValue } = useContext(CodeContext);
   const CreateNewChat = async () => {
-    await axios.post( 
+    await axios.post(
       `${API_URL}/createchat`,
       {},
       {
-        headers: { userId: "55bcc920-cef6-4bb7-a9f7-73eeb0ac9685" },
+        headers: { userId: "55bcc920-cef6-4bb7-a9f7-73eeb0ac9685" }, // add dynamically
       }
     );
 
@@ -24,10 +23,12 @@ const Top = () => {
       <div className="p-5  bg-[#090a0e]">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <UserButton />
-            <span className="font-semibold text-lg text-gray-100 tracking-tight">
-              Bug Finder
-            </span>
+            <div className="user-log flex items-center justify-center text-white bg-gradient-to-r from-purple-500 to-blue-900 w-8 h-8  rounded-full">
+              V
+            </div>
+            <div className=" text-lg text-gray-100 tracking-wider flex items-center font-semibold">
+              BugBugGo
+            </div>
           </div>
           <button
             onClick={CreateNewChat}

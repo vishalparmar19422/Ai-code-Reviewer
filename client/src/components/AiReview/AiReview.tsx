@@ -7,7 +7,7 @@ import { Minimize2 } from "lucide-react";
 import "github-markdown-css/github-markdown.css";
 import { CodeContext } from "../../context/CodeContenxt";
 
-export default function CodeEditor() {
+export default function AiReview() {
   const { setErrPop, errPop, currChatData } = useContext(CodeContext);
 
   return (

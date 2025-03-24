@@ -1,24 +1,24 @@
-  import MainPanel from "./components/MainPanel/MainPanel";
-  import CodeEditor from "./components/CodeEditor/CodeEditor";
-  import HomePage from "./components/HomePage/HomePage";
-  import { SignedIn, SignedOut, } from "@clerk/clerk-react";
-  import SidePanel from "./components/SidePanel";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CodereviewPage from "./pages/CodeReviewPage/CodereviewPage";
+import HomePage from "./pages/HomePage/HomePage";
+import AiReview from "./components/AiReview/AiReview";
+import SignIn from "./pages/Signin/Signin";
+import SignUp from "./pages/Signup/SignUp";
 
-  function App() {
-    return (
-      <>
-        <SignedOut>
-          <HomePage />
-        </SignedOut>
-        <SignedIn>
-          <div className="bg-black w-screen h-screen flex">
-            <SidePanel />
-            <MainPanel />
-            <CodeEditor />
-          </div>
-        </SignedIn>
-      </>
-    );
-  }
+function App() {
+  return (
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/codereview" element={<CodereviewPage />} />
+          <Route path="/codereview" element={<AiReview />} />
+        </Routes>
+      </BrowserRouter>
+    </>
+  );
+}
 
-  export default App;
+export default App;

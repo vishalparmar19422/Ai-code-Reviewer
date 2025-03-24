@@ -13,7 +13,7 @@ const Mid = () => {
     try {
       const AllChat = await axios.get(`${API_URL}/getuserchats`, {
         headers: {
-          userId: "55bcc920-cef6-4bb7-a9f7-73eeb0ac9685",
+          userId:"55bcc920-cef6-4bb7-a9f7-73eeb0ac9685", // need to add dynamically
         },
       });
       setAllChat(AllChat.data);
