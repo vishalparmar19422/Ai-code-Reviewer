@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   MessageSquare,
   ChevronDown,
@@ -15,16 +15,14 @@ import API_URL from "../../config";
 
 export default function MainPanel() {
   const {
-    value,
     setValue,
     setErrPop,
-    handleEmptyValue,
     currChat,
     allChat,
     currChatData,
     setCurrChatData,
   } = useContext(CodeContext);
-  const [code, setCode] = useState("//Write your code here\n");
+  const [code, setCode] = useState("Hello");
   const [language, setLanguage] = useState("js");
   const [isLanguageDropdownOpen, setIsLanguageDropdownOpen] = useState(false);
 
@@ -75,9 +73,13 @@ export default function MainPanel() {
       });
       setCurrChatData(chat);
     } else {
-      setCurrChatData(undefined);
+      setCurrChatData(allChat[0]);
     }
-  }, [allChat, currChat, value]);
+  }, [allChat, currChat]);
+
+  const handleChange = (Newvalue: string | undefined) => {
+    setCode(Newvalue || "Write Code Here");
+  };
 
   return (
     <>
@@ -163,9 +165,7 @@ export default function MainPanel() {
                 theme="vs-dark"
                 height="535px"
                 defaultValue="//Loading"
-                onChange={(evn) => {
-                  setCode(evn || "");
-                }}
+                onChange={handleChange}
                 options={{
                   minimap: { enabled: false },
                   scrollbar: {
@@ -185,9 +185,13 @@ export default function MainPanel() {
           </button>
           <button
             onClick={() => {
-              const empty = handleEmptyValue(code);
-              if (!empty) {
+              if (
+                currChatData?.code ||
+                (code && currChatData?.code !== "//write something here")
+              ) {
+                setCode(currChatData?.code || " ");
                 getGeminiResponse();
+                return;
               } else {
                 toast.error("Code Is Empty ", {
                   style: {

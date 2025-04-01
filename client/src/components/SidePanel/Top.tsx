@@ -11,7 +11,7 @@ const Top = () => {
       `${API_URL}/createchat`,
       {},
       {
-        headers: { userId: "55bcc920-cef6-4bb7-a9f7-73eeb0ac9685" }, // add dynamically
+        headers: { token: localStorage.getItem("token") }, 
       }
     );
 

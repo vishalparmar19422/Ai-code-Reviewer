@@ -3,16 +3,44 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast, Toaster } from "react-hot-toast";
+import axios from "axios";
+import API_URL from "../../config";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const [username, setUsername] = useState(" ");
+  const [email, setEmail] = useState(" ");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmpassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const OnSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const OnSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setIsLoading(true);
     e.preventDefault();
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match."); 
+      toast.error("Passwords do not match.");
+      return;
+    }
+    try {
+      const data = await axios.post(`${API_URL}/signup`, {
+        username,
+        email,
+        password,
+      });
+      localStorage.setItem("token", data.data.token);
+      setIsLoading(false);
+      toast.success("Account Created Successfully");
+      navigate("/codereview");
+    } catch (error: any) {
+      setIsLoading(false);
+
+      if (error?.response?.data?.message) {
+        console.log(error);
+        toast.error(error.response.data.message);
+      } else {
+        console.log("error while sigining up ", error);
+        toast.error("An unexpected error occured");
+      }
     }
   };
 
@@ -42,6 +70,8 @@ export default function SignUp() {
                 Username
               </label>
               <input
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 type="email"
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
                 placeholder="Roe"
@@ -53,6 +83,10 @@ export default function SignUp() {
               </label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
                 placeholder="Roe@example.com"
               />
@@ -101,14 +135,20 @@ export default function SignUp() {
                 </a>
               </label>
             </div>
+
             <button
+              disabled={isLoading}
               type="submit"
               onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                 OnSubmit(e);
               }}
-              className="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg"
+              className={`w-full flex justify-center bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg  ${isLoading && "bg-gray-600 cursor-not-allowed "} `}
             >
-              Create Account
+              {isLoading ? (
+                <div className=" animate-spin h-5 w-5  rounded-full  border-t-transparent border-4 "></div>
+              ) : (
+                "Create Account"
+              )}
             </button>
           </form>
           <p className="mt-6 text-center text-gray-400">
@@ -145,30 +185,6 @@ export default function SignUp() {
           </div>
         </div>
       </footer>
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        @keyframes fade-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-up {
-          animation: fade-up 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }

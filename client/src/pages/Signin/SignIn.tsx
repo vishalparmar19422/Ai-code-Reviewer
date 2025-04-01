@@ -1,11 +1,46 @@
 import { Bug } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import API_URL from "../../config";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState(" ");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const OnSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    setIsLoading(true);
+    e.preventDefault();
+
+    try {
+      const data = await axios.post(`${API_URL}/signin`, {
+        email,
+        password,
+      });
+      console.log(data.data);
+      localStorage.setItem("token", data.data.token);
+      setIsLoading(false);
+
+      toast.success("Signd In  Successfully");
+      navigate("/codereview");
+    } catch (error: any) {
+      setIsLoading(false);
+
+      if (error?.response?.data?.message) {
+        toast.error(error.response.data.message); // Display message from server
+        console.log(error);
+      } else {
+        toast.error("An unexpected error occurred");
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex flex-col">
+      <Toaster />
       {/* Navbar */}
       <nav className="flex justify-between items-center bg-gray-950 p-6 shadow-lg border-b border-gray-800">
         <div
@@ -29,6 +64,10 @@ export default function SignIn() {
                 Email Address
               </label>
               <input
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
                 type="email"
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter your email"
@@ -39,6 +78,10 @@ export default function SignIn() {
                 Password
               </label>
               <input
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
                 type="password"
                 className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter your password"
@@ -62,14 +105,18 @@ export default function SignIn() {
               </a>
             </div>
             <button
+              disabled={isLoading}
               onClick={(e) => {
-                e.preventDefault();
-                console.log("hello");
+                OnSubmit(e);
               }}
               type="submit"
-              className="w-full bg-violet-600 hover:bg-violet-500 text-white font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg"
+              className="w-full bg-violet-600 hover:bg-violet-500 text-white flex justify-center font-semibold py-3 rounded-lg transition-all duration-300 shadow-lg"
             >
-              Sign In
+              {isLoading ? (
+                <div className="w-5  h-5 animate-spin   border-t-transparent border-4  rounded-full"></div>
+              ) : (
+                "SignIn"
+              )}
             </button>
           </form>
           <p className="mt-6 text-center text-gray-400">
@@ -106,30 +153,6 @@ export default function SignIn() {
           </div>
         </div>
       </footer>
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .animate-spin-slow {
-          animation: spin-slow 8s linear infinite;
-        }
-        @keyframes fade-up {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fade-up {
-          animation: fade-up 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 }

@@ -46,12 +46,12 @@ export const CodeProvider: React.FC<CodeProviderProps> = ({ children }) => {
   const [value, setValue] = useState("");
   const [errPop, setErrPop] = useState(false);
   const [allChat, setAllChat] = useState<Chat[]>([]);
-  const [currChat, setCurrChat] = useState<string>("5cf83701-4c8a-4bb6-8d79-ec528c8c8f46");
+  const [currChat, setCurrChat] = useState<string>("");
   const [currChatData, setCurrChatData] = useState<Chat | undefined>(undefined);
 
   const handleEmptyValue = (val: string) => {
     const defaultText = "//Write your code here\n";
-    if (!val.trim() || val == defaultText) {
+    if (val == defaultText) {
       return true;
     }
     return false;

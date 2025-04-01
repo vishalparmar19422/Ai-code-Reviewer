@@ -1,4 +1,5 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
@@ -126,10 +127,18 @@ export const getGeminiRes = async (req, res) => {
 };
 
 export const CreateNewChat = async (req, res) => {
+  const { verify } = jwt;
+  const token = req.headers.token;
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: "Unauthorized - Token not provided" });
+  }
+
   try {
-    const userId = req.get("userId");
+    const { userId } = verify(token, process.env.JWT_SECRET);
     if (!userId) {
-      res.status(400).json({ message: "userId is requried" });
+      return res.status(400).json({ message: "userId is requried" });
     }
     const newChat = await prisma.chat.create({
       data: {
